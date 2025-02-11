@@ -29,7 +29,7 @@
 
 ```bash
 git clone <repository-url>
-cd myapi
+cd my-api
 npm install
 ```
 
