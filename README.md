@@ -39,8 +39,6 @@ npm install
 
 ```
 DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
 ```
 
 3. 初始化数据库：
