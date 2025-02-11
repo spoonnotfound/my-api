@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import Modal from "@/components/Modal";
 
@@ -21,26 +21,27 @@ export default function TokensPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchTokens();
-  }, []);
-
-  const fetchTokens = async () => {
+  const fetchTokens = useCallback(async () => {
     try {
       const response = await fetch("/api/tokens");
+      if (!response.ok) {
+        throw new Error('Failed to fetch tokens');
+      }
       const data = await response.json();
       setTokens(data);
     } catch (error) {
-      console.error("Failed to fetch tokens:", error);
+      console.error('Error fetching tokens:', error);
       toast({
         title: "错误",
         description: "获取令牌列表失败",
-        variant: "default",
-        className:
-          "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800",
+        variant: "destructive",
       });
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchTokens();
+  }, [fetchTokens]);
 
   const createToken = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -182,7 +183,7 @@ export default function TokensPage() {
               还没有创建任何令牌
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              点击上方的"添加令牌"按钮创建您的第一个访问令牌
+              点击上方的&ldquo;添加令牌&rdquo;按钮创建您的第一个访问令牌
             </p>
           </div>
         ) : (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface User {
@@ -19,11 +19,7 @@ export default function SettingsPage() {
   const [success, setSuccess] = useState('')
   const router = useRouter()
 
-  useEffect(() => {
-    fetchUser()
-  }, [])
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/check')
       if (!response.ok) {
@@ -37,7 +33,11 @@ export default function SettingsPage() {
       console.error('Failed to fetch user:', error)
       router.push('/login')
     }
-  }
+  }, [router])
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

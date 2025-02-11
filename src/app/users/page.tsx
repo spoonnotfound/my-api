@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import Modal from '@/components/Modal'
 
@@ -23,27 +23,27 @@ export default function UsersPage() {
   })
   const { toast } = useToast()
 
-  useEffect(() => {
-    fetchUsers()
-  }, [])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
-      const response = await fetch('/api/user')
+      const response = await fetch('/api/users')
       if (!response.ok) {
-        throw new Error('获取用户列表失败')
+        throw new Error('Failed to fetch users')
       }
       const data = await response.json()
       setUsers(data)
     } catch (error) {
-      console.error('Failed to fetch users:', error)
+      console.error('Error fetching users:', error)
       toast({
-        title: '错误',
-        description: '获取用户列表失败',
-        variant: 'destructive',
+        title: "错误",
+        description: "获取用户列表失败",
+        variant: "destructive",
       })
     }
-  }
+  }, [toast])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -248,7 +248,7 @@ export default function UsersPage() {
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               placeholder="输入用户名"
               className="w-full p-2 border dark:border-gray-700 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-theme"
-              disabled={isLoading || (editingId && formData.username === 'admin')}
+              disabled={Boolean(isLoading || (editingId && formData.username === 'admin'))}
             />
           </div>
 

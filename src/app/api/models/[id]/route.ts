@@ -1,14 +1,22 @@
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+type Props = {
+  params: Promise<{
+    id: string
+  }>
+}
+
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: Props
 ) {
+  const { id } = await params
   try {
     await prisma.modelConfig.delete({
       where: {
-        id: params.id
+        id
       }
     })
     return NextResponse.json({ success: true })
@@ -22,14 +30,15 @@ export async function DELETE(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: Props
 ) {
+  const { id } = await params
   try {
-    const data = await request.json()
+    const data = await req.json()
     const model = await prisma.modelConfig.update({
       where: {
-        id: params.id
+        id
       },
       data
     })

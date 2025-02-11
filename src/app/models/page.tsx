@@ -174,7 +174,7 @@ export default function ModelsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
             </svg>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">还没有配置任何模型</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">点击上方的"添加模型"按钮开始配置您的第一个 AI 模型</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">点击上方的&ldquo;添加模型&rdquo;按钮开始配置您的第一个 AI 模型</p>
           </div>
         ) : (
           models.map((model) => (
