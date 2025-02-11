@@ -1,5 +1,9 @@
 {
-  "buildCommand": "prisma generate && prisma db push --accept-data-loss && next build",
+  "buildCommand": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma generate && prisma db push --accept-data-loss && next build",
   "installCommand": "npm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "env": {
+    "DATABASE_PROVIDER": "postgresql",
+    "JWT_SECRET": "your-vercel-production-jwt-secret-key-32-chars"
+  }
 } 
