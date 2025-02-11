@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verify } from 'jsonwebtoken'
 import { prisma } from '@/lib/prisma'
+import { getJwtSecret } from '@/lib/config'
 
 export async function GET() {
   try {
@@ -11,7 +12,7 @@ export async function GET() {
       return NextResponse.json({ error: '未登录' }, { status: 401 })
     }
 
-    const decoded = verify(token, 'your-secret-key') as { id: string }
+    const decoded = verify(token, getJwtSecret()) as { id: string }
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
       select: { id: true, username: true }

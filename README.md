@@ -110,3 +110,80 @@ npm start
 ## 许可证
 
 MIT
+
+# My-API
+
+一个基于 Next.js 的 API 管理平台。
+
+## 功能特性
+
+- 用户认证和授权
+- API 令牌管理
+- 模型配置管理
+- 支持多种 AI 模型提供商
+
+## 本地开发
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/yourusername/my-api.git
+cd my-api
+```
+
+2. 安装依赖：
+```bash
+npm install
+```
+
+3. 复制环境变量文件：
+```bash
+cp .env.example .env
+```
+
+4. 配置环境变量：
+- 在 `.env` 文件中填写必要的配置信息
+
+5. 初始化数据库：
+```bash
+npx prisma migrate dev
+```
+
+6. 启动开发服务器：
+```bash
+npm run dev
+```
+
+## Vercel 部署
+
+1. 在 Vercel 中创建新项目并连接到 GitHub 仓库
+
+2. 设置 PostgreSQL 数据库：
+   - 在 Vercel 控制台中，进入项目设置
+   - 选择 "Storage" 标签
+   - 点击 "Connect Database"
+   - 选择 "Create New" -> "Postgres"
+   - 按照向导完成数据库创建
+   - Vercel 会自动添加必要的环境变量
+
+3. 添加其他环境变量：
+   - 在项目设置中找到 "Environment Variables" 部分
+   - 添加 `JWT_SECRET` 等其他必要的环境变量
+
+4. 部署项目：
+   - Vercel 会自动检测代码变更并部署
+   - 首次部署时会自动运行数据库迁移
+
+## 环境变量
+
+- `POSTGRES_PRISMA_URL`: PostgreSQL 数据库连接 URL（带连接池）
+- `POSTGRES_URL_NON_POOLING`: PostgreSQL 数据库直连 URL
+- `JWT_SECRET`: JWT 令牌加密密钥
+- `NODE_ENV`: 运行环境（development/production）
+
+## 技术栈
+
+- Next.js 15
+- Prisma ORM
+- PostgreSQL
+- TypeScript
+- Tailwind CSS

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { cookies } from 'next/headers'
 import { sign } from 'jsonwebtoken'
+import { getJwtSecret } from '@/lib/config'
 
 export async function POST(request: Request) {
   try {
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
 
     // 生成 JWT token
     try {
-      const token = sign({ id: user.id }, 'your-secret-key', {
+      const token = sign({ id: user.id }, getJwtSecret(), {
         expiresIn: '7d'
       })
       
