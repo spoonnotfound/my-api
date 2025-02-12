@@ -56,7 +56,8 @@ export async function POST(request: Request) {
     const requestBody = {
       ...body,
       model: modelName,
-      stream
+      stream,
+      ...(provider === 'openrouter' && { include_reasoning: true })
     }
 
     if (stream) {

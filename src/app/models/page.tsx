@@ -84,13 +84,7 @@ export default function AvailableModelsPage() {
         headers: {
           'Authorization': `Bearer ${selectedConfig.apiKey}`,
           'Content-Type': 'application/json'
-        },
-        ...(provider === 'openrouter' && {
-          body: JSON.stringify({
-            include_reasoning: true
-          }),
-          method: 'POST'
-        })
+        }
       })
 
       if (!response.ok) {
