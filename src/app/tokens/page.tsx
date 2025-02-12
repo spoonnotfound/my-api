@@ -14,28 +14,31 @@ interface Token {
 
 export default function TokensPage() {
   const [tokens, setTokens] = useState<Token[]>([]);
-  const [newTokenName, setNewTokenName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [newTokenName, setNewTokenName] = useState("");
   const { toast } = useToast();
 
   const fetchTokens = useCallback(async () => {
     try {
       const response = await fetch("/api/tokens");
       if (!response.ok) {
-        throw new Error('Failed to fetch tokens');
+        throw new Error("Failed to fetch tokens");
       }
       const data = await response.json();
       setTokens(data);
     } catch (error) {
-      console.error('Error fetching tokens:', error);
+      console.error("Error fetching tokens:", error);
       toast({
         title: "错误",
         description: "获取令牌列表失败",
         variant: "destructive",
       });
+    } finally {
+      setIsInitialLoading(false);
     }
   }, [toast]);
 
@@ -136,6 +139,28 @@ export default function TokensPage() {
     }
   };
 
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: "成功",
+        description: "令牌已复制到剪贴板",
+        variant: "default",
+        className:
+          "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800",
+      });
+    } catch (error) {
+      console.error("Failed to copy:", error);
+      toast({
+        title: "错误",
+        description: "复制失败，请手动复制",
+        variant: "default",
+        className:
+          "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800",
+      });
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-8">
@@ -164,7 +189,11 @@ export default function TokensPage() {
       </div>
 
       <div className="space-y-4">
-        {tokens.length === 0 ? (
+        {isInitialLoading ? (
+          <div className="flex justify-center items-center min-h-[50vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : tokens.length === 0 ? (
           <div className="text-center py-12 px-4 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 transition-theme">
             <svg
               className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600 mb-4"
@@ -227,8 +256,27 @@ export default function TokensPage() {
                   </button>
                 </div>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900 p-2 rounded font-mono text-sm break-all text-gray-900 dark:text-white transition-theme">
-                {token.token}
+              <div className="group relative bg-gray-50 dark:bg-gray-900 p-2 rounded font-mono text-sm break-all text-gray-900 dark:text-white transition-theme">
+                <button
+                  onClick={() => handleCopy(token.token)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-theme"
+                  aria-label="复制令牌"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                    />
+                  </svg>
+                </button>
+                <div className="pl-8">{token.token}</div>
               </div>
               <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 transition-theme">
                 创建时间: {new Date(token.createdAt).toLocaleString()}

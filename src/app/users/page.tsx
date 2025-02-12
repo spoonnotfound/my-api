@@ -14,6 +14,7 @@ interface User {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -38,6 +39,8 @@ export default function UsersPage() {
         description: "获取用户列表失败",
         variant: "destructive",
       })
+    } finally {
+      setIsInitialLoading(false)
     }
   }, [toast])
 
@@ -193,41 +196,47 @@ export default function UsersPage() {
       </div>
 
       <div className="space-y-4">
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className="p-4 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 transition-theme"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-theme">{user.username}</h3>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handleEdit(user)}
-                  className="p-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-theme"
-                  aria-label="编辑"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
-                {user.username !== 'admin' && (
+        {isInitialLoading ? (
+          <div className="flex justify-center items-center min-h-[50vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          users.map((user) => (
+            <div
+              key={user.id}
+              className="p-4 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 transition-theme"
+            >
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-theme">{user.username}</h3>
+                <div className="flex items-center gap-2">
                   <button
-                    onClick={() => handleDelete(user.id)}
-                    className="p-1 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-theme"
-                    aria-label="删除"
+                    onClick={() => handleEdit(user)}
+                    className="p-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-theme"
+                    aria-label="编辑"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </button>
-                )}
+                  {user.username !== 'admin' && (
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="p-1 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-theme"
+                      aria-label="删除"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 transition-theme">
+                创建时间: {new Date(user.createdAt).toLocaleString()}
               </div>
             </div>
-            <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 transition-theme">
-              创建时间: {new Date(user.createdAt).toLocaleString()}
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <Modal

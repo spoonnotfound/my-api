@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import Image from 'next/image'
 
-const menuItems = [
+const navigation = [
   {
     name: '首页',
     href: '/',
@@ -20,7 +20,11 @@ const menuItems = [
     href: '/tokens',
   },
   {
-    name: '模型配置',
+    name: '提供商配置',
+    href: '/providers',
+  },
+  {
+    name: '模型列表',
     href: '/models',
   },
 ]
@@ -103,7 +107,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
           <nav className="p-4">
             <ul className="space-y-2">
-              {menuItems.map((item) => (
+              {navigation.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

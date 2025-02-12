@@ -98,7 +98,15 @@ export default function SettingsPage() {
   }
 
   if (!user) {
-    return null
+    return (
+      <div className="text-center py-12 px-4 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 transition-theme">
+        <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">未找到用户信息</h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">请稍后再试</p>
+      </div>
+    )
   }
 
   return (

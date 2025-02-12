@@ -30,11 +30,11 @@ model Token {
 
 model ModelConfig {
   id        String   @id @default(uuid())
-  name      String   @unique
-  type      String   // openai, anthropic, openrouter
+  provider  String   // 可以是 openai, anthropic, openrouter 或自定义值
   apiKey    String
   baseUrl   String?
+  modelType String?  // 自定义提供商的模型类型
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
-} 
+}

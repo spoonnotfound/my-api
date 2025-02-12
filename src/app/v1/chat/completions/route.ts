@@ -36,8 +36,10 @@ export async function POST(request: Request) {
 
     const modelConfig = await prisma.modelConfig.findFirst({
       where: {
-        name: provider,
-        isActive: true
+        AND: [
+          { provider: provider },
+          { isActive: true }
+        ]
       }
     })
 
